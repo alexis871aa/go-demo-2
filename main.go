@@ -2,17 +2,35 @@ package main
 
 import "fmt"
 
+// В цикле спрашиваем ввод трансакций: -10, 10, 40.5,
+// Добавлять в массив трансакций
+// Вывести массив
+// Вывести сумму баланса в консоль
+
 func main() {
-	transactions := [6]int{1, 2, 3, 4, 5, 6}
-	transactionPartial := transactions[1:5]         // [2, 3, 4, 5] transactionPartial
-	transactionNewPartial := transactionPartial[:1] // [2] transactionNewPartial
-	transactionNewPartial[0] = 30                   // [30] transactionNewPartial, [30 3 4 5] transactionPartial, [1 30 3 4 5 6] transaction
+	transactions := make([]float64, 0, 10)
+	for {
+		transaction := scanTransaction()
+		if transaction == 0 {
+			break
+		}
+		transactions = append(transactions, transaction)
+	}
+	balance := calculateBalance(transactions)
+	fmt.Printf("Ваш баланс: %.2f", balance)
+}
 
-	transactionNewPartial = transactionNewPartial[0:4] // [30 3 4 5] transactionNewPartial, [30 3 4 5] transactionPartial, [1 30 3 4 5 6] transaction
+func scanTransaction() float64 {
+	var transaction float64
+	fmt.Print("Введите трансакцию (n для выхода): ")
+	fmt.Scan(&transaction)
+	return transaction
+}
 
-	fmt.Println(transactions)                                           // [1 30 3 4 5 6]
-	fmt.Println(transactionPartial)                                     // [30 3 4 5]
-	fmt.Println(transactionNewPartial)                                  // [30 3 4]
-	fmt.Println(len(transactionPartial), cap(transactionPartial))       // len=4 cap=5
-	fmt.Println(len(transactionNewPartial), cap(transactionNewPartial)) // len=3 cap=5
+func calculateBalance(transactions []float64) float64 {
+	balance := 0.0
+	for _, value := range transactions {
+		balance += value
+	}
+	return balance
 }
